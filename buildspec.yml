@@ -19,8 +19,7 @@ phases:
 
       - pip install pytest
       - docker build --tag jwt-api-test -f Dockerfile .
-      - ls -l
-      - docker run --env-file env_file -p 80:8080 -d jwt-api-test
+      - docker run -p 80:8080 -d jwt-api-test
       - pytest
       - docker stop $(docker ps -a -q)
   build:
