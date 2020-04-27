@@ -16,6 +16,12 @@ phases:
       - sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY_URI:$TAG"'@' simple_jwt_api.yml
       - $(aws ecr get-login --no-include-email)
       - export KUBECONFIG=$HOME/.kube/config
+
+      - pip3 install -r requirements.txt
+      - docker build --tag jwt-api-test -f Dockerfile .
+      - docker run --env-file env_file -p 80:8080 -d jwt-api-test
+      - pytest
+      - docker stop $(docker ps -a -q)
   build:
     commands:
       - docker build --tag $REPOSITORY_URI:$TAG .
